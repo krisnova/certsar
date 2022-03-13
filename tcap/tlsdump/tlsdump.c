@@ -25,18 +25,20 @@
 #include <stdio.h>
 #include <string.h>
 
-void usage() {
+static void usage(void) {
     printf("\n");
-    printf("Usage:\n");
+    printf("tlsdump: TLS capture utility\n");
+    printf("\n");
+    about(); //tcap details
+    printf("\n");
     printf("tlsdump [options...] \n");
     printf("\n");
     printf("[Options]\n");
     printf("\n");
     printf("  -h               print the usage and help screen.\n");
     printf("\n");
-    about(); //tcap about
-}
 
+}
 
 // main
 //
@@ -69,6 +71,6 @@ int main (int argc, char **argv) {
         optind++;
     }
 
-    printf("[tlsdump]: \n");
+    usage();
 
 }

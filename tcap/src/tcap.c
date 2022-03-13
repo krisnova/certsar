@@ -24,10 +24,6 @@
 #include <stdio.h>
 
 void about(void) {
-    printf("********************************************************************************\n");
-    printf(" [tcap]  : TLS Capture Library \n");
-    printf("\n");
-    printf("    Author  : Kris Nóva <kris@nivenly.com> \n");
-    printf("    Version : %s \n", VERSION);
-    printf("********************************************************************************\n");
+    printf("     > tcap version: %s \n", VERSION);
+    printf("     > libtcap.so.%s \n", VERSION);
 }
