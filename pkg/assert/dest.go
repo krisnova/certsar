@@ -19,32 +19,17 @@
 //  ╚██████╗███████╗██║  ██║   ██║   ███████║██║  ██║██║  ██║
 //   ╚═════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-package gotcap
+package assert
 
-// #cgo LDFLAGS: -ltcap -lpcap
-//
-// #include "tcap.h"
-// #include "pcap.h"
-import "C"
 import "net"
 
-const (
-	// TCAP_MAX_DIGEST_PACKET is taken from tcap.h
-	TCAP_MAX_DIGEST_PACKET int = 32
-)
-
-// TCAPDigest corresponds to the digest offered in the tcap.h header file.
-// This represents a TLS digest being snigged off the network using tcpdump.
-type TCAPDigest struct {
-	Destination *net.Conn
-	Source      *net.Conn
-	Packets     [TCAP_MAX_DIGEST_PACKET]*C.uchar
+func DestinationIsNot(dest net.Conn, check net.Conn) bool {
+	return !DestinationIs(dest, check)
 }
 
-// TCAPNext can be perpetually called to find the next TLS digest from the network.
-func TCAPNext() *TCAPDigest {
-	tcapdigest := &TCAPDigest{}
-	d := C.tcap_next()
-	tcapdigest.Packets = d.packets
-	return tcapdigest
+func DestinationIs(dest net.Conn, check net.Conn) bool {
+	// Dial dest net.Conn and retrieve TLS material
+	// Dial check net.Conn and retrieve TLS material
+	// Check if the fingerprints are the same
+	return true
 }
