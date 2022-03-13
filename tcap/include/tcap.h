@@ -22,11 +22,9 @@
 #ifndef LIBTCAP_H
 #define LIBTCAP_H
 
-#define AUTHOR_NAME = "Kris Nóva"
-#define AUTHOR_EMAIL = "<kris@nivenly.com>"
+#define AUTHOR_NAME "Kris Nóva"
+#define AUTHOR_EMAIL "<kris@nivenly.com>"
 
-//
-//
-//
+extern void about(void);
 
 #endif

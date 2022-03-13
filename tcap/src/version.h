@@ -19,15 +19,5 @@
 //  ╚██████╗███████╗██║  ██║   ██║   ███████║██║  ██║██║  ██║
 //   ╚═════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-#include "tcap.h"
-#include "version.h"
-#include <stdio.h>
+#define VERSION "0.0.1"
 
-void about(void) {
-    printf("********************************************************************************\n");
-    printf(" [tcap]  : TLS Capture Library \n");
-    printf("\n");
-    printf("    Author  : Kris Nóva <kris@nivenly.com> \n");
-    printf("    Version : %s \n", VERSION);
-    printf("********************************************************************************\n");
-}

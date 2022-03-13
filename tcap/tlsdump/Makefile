@@ -40,7 +40,7 @@ clean:  ## Show help messages for make targets
 
 install:  ## Install tlsdump to /usr/local/bin
 		chmod +x tlsdump
-		cp tlsdump /usr/local/bin/tlsdump
+		cp tlsdump /usr/bin/tlsdump
 
 .PHONY: help
 help:  ## Show help messages for make targets

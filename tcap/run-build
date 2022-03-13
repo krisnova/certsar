@@ -1,3 +1,4 @@
+#!/bin/bash
 # Copyright © 2022 The Certsar Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,49 +19,18 @@
 #  ██║     ██╔══╝  ██╔══██╗   ██║   ╚════██║██╔══██║██╔══██╗
 #  ╚██████╗███████╗██║  ██║   ██║   ███████║██║  ██║██║  ██║
 #   ╚═════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝
-#
-#
-######################################################################
-set(TCAP_SO_VERSION "0.0.1")  # Note: Update /src/version.h as well! #
-######################################################################
 
-cmake_minimum_required(VERSION 3.9)
-project(tcap VERSION ${TCAP_SO_VERSION} DESCRIPTION "TLS Capture Library")
+# Build the shared object
+cd build
+make
+sudo make install
+# make clean
+cd ..
 
-#
-# Define all internal files
-#
-add_library(tcap SHARED
-        src/tcap.c
-        )
+# Build tlsdump
+cd tlsdump
+make
+sudo make install
+# make clean
+cd ..
 
-find_package(OpenSSL REQUIRED)
-target_link_libraries(tcap OpenSSL::SSL)
-
-#
-# Version of the library properties
-#
-set_target_properties(tcap PROPERTIES VERSION ${TCAP_SO_VERSION})
-#
-# This is where the magic symlinking in /usr/include comes to play
-set_target_properties(tcap PROPERTIES SOVERSION ${TCAP_SO_VERSION})
-
-#
-# Everything in /include will be what we expose as API
-#
-set_target_properties(tcap PROPERTIES PUBLIC_HEADER include/tcap.h)
-
-# Add the top level directory to make our #include statements cleaner
-target_include_directories(tcap PRIVATE .)
-# Add include (public API)
-target_include_directories(tcap PRIVATE include)
-# Add src (private implementation)
-target_include_directories(tcap PRIVATE src)
-
-# make install
-# Here is the install rule
-include(GNUInstallDirs)
-# This is where we put the shared object on the filesystem
-install(TARGETS tcap
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})

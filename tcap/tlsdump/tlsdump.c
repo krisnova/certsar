@@ -26,8 +26,6 @@
 #include <string.h>
 
 void usage() {
-    // TODO add about() in the library!
-    //about();
     printf("\n");
     printf("Usage:\n");
     printf("tlsdump [options...] \n");
@@ -36,6 +34,7 @@ void usage() {
     printf("\n");
     printf("  -h               print the usage and help screen.\n");
     printf("\n");
+    about(); //tcap about
 }
 
 
