@@ -21,15 +21,17 @@
 
 // Include the global tcap header
 #include "tcap.h"
+#include "pcap.h"
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
 
-void usage() {
-    // TODO add about() in the library!
-    //about();
+static void usage(void) {
     printf("\n");
-    printf("Usage:\n");
+    printf("tlsdump: TLS capture utility\n");
+    printf("\n");
+    about(); //tcap details
+    printf("\n");
     printf("tlsdump [options...] \n");
     printf("\n");
     printf("[Options]\n");
@@ -37,7 +39,6 @@ void usage() {
     printf("  -h               print the usage and help screen.\n");
     printf("\n");
 }
-
 
 // main
 //
@@ -69,7 +70,10 @@ int main (int argc, char **argv) {
         }
         optind++;
     }
-
-    printf("[tlsdump]: \n");
+    tcap_digest t;
+    while(1) {
+        t = tcap_next();
+        printf("tcap packet: %s\n", t.packets[0]);
+    }
 
 }

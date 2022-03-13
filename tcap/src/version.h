@@ -19,20 +19,5 @@
 //  ╚██████╗███████╗██║  ██║   ██║   ███████║██║  ██║██║  ██║
 //   ╚═════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-#include "pcap.h"
+#define VERSION "0.0.1"
 
-#ifndef LIBTCAP_H
-#define LIBTCAP_H
-
-#define TCAP_MAX_DIGEST_PACKET 32
-
-typedef struct tcap_digest {
-    // TODO Src and Dst
-    const u_char *packets[TCAP_MAX_DIGEST_PACKET];
-} tcap_digest;
-
-extern void about(void);
-extern struct tcap_digest tcap_next(void);
-
-
-#endif

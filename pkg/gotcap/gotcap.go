@@ -19,20 +19,29 @@
 //  ╚██████╗███████╗██║  ██║   ██║   ███████║██║  ██║██║  ██║
 //   ╚═════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-#include "pcap.h"
+package gotcap
 
-#ifndef LIBTCAP_H
-#define LIBTCAP_H
+// #cgo LDFLAGS: -ltcap -lpcap
+//
+// #include "tcap.h"
+// #include "pcap.h"
+import "C"
 
-#define TCAP_MAX_DIGEST_PACKET 32
+const (
+	// TCAP_MAX_DIGEST_PACKET is taken from tcap.h
+	TCAP_MAX_DIGEST_PACKET int = 32
+)
 
-typedef struct tcap_digest {
-    // TODO Src and Dst
-    const u_char *packets[TCAP_MAX_DIGEST_PACKET];
-} tcap_digest;
+// TCAPDigest corresponds to the digest offered in the tcap.h header file.
+// This represents a TLS digest being snigged off the network using tcpdump.
+type TCAPDigest struct {
+	Packets [TCAP_MAX_DIGEST_PACKET]*C.uchar
+}
 
-extern void about(void);
-extern struct tcap_digest tcap_next(void);
-
-
-#endif
+// TCAPNext can be perpetually called to find the next TLS digest from the network.
+func TCAPNext() *TCAPDigest {
+	tcapdigest := &TCAPDigest{}
+	d := C.tcap_next()
+	tcapdigest.Packets = d.packets
+	return tcapdigest
+}
