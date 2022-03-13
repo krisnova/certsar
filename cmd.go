@@ -22,8 +22,15 @@
 
 package certsar
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/kris-nova/certsar/pkg/gotcap"
+)
 
 func RunCommandLineAndExit() {
 	fmt.Printf("certsar v%s\n", Version)
+	for {
+		t := gotcap.TCAPNext()
+		fmt.Println(t)
+	}
 }

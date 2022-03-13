@@ -38,7 +38,6 @@ static void usage(void) {
     printf("\n");
     printf("  -h               print the usage and help screen.\n");
     printf("\n");
-
 }
 
 // main
@@ -71,7 +70,6 @@ int main (int argc, char **argv) {
         }
         optind++;
     }
-
     tcap_digest t;
     while(1) {
         t = tcap_next();
