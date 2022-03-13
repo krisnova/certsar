@@ -21,6 +21,7 @@
 
 // Include the global tcap header
 #include "tcap.h"
+#include "pcap.h"
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
@@ -71,6 +72,10 @@ int main (int argc, char **argv) {
         optind++;
     }
 
-    usage();
+    tcap_digest t;
+    while(1) {
+        t = tcap_next();
+        printf("tcap packet: %s\n", t.packets[0]);
+    }
 
 }

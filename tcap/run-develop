@@ -1,3 +1,4 @@
+#!/bin/bash
 # Copyright © 2022 The Certsar Authors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,29 +20,5 @@
 #  ╚██████╗███████╗██║  ██║   ██║   ███████║██║  ██║██║  ██║
 #   ╚═════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝
 
- ifeq (, $(shell which clang))
- $(error "No clang found. Please install clang for compiling!")
- endif
-
-CC=clang
-CFLAGS=-ltcap -lpcap
-DEPS = tlsdump.c
-OBJ = tlsdump.o
-
-%.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
-
-tlsdump: $(OBJ) ## Generate the main tlsdump program
-	$(CC) -o $@ $^ $(CFLAGS)
-
-clean:  ## Show help messages for make targets
-		rm -rf *.o
-		rm -rf tlsdump
-
-install:  ## Install tlsdump to /usr/local/bin
-		chmod +x tlsdump
-		cp tlsdump /usr/bin/tlsdump
-
-.PHONY: help
-help:  ## Show help messages for make targets
-	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}'
+./run-build
+sudo -E LD_LIBRARY_PATH=/usr/local/lib tlsdump
