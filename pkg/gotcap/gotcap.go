@@ -28,13 +28,17 @@ package gotcap
 import "C"
 
 const (
+	// TCAP_MAX_DIGEST_PACKET is taken from tcap.h
 	TCAP_MAX_DIGEST_PACKET int = 32
 )
 
+// TCAPDigest corresponds to the digest offered in the tcap.h header file.
+// This represents a TLS digest being snigged off the network using tcpdump.
 type TCAPDigest struct {
 	Packets [TCAP_MAX_DIGEST_PACKET]*C.uchar
 }
 
+// TCAPNext can be perpetually called to find the next TLS digest from the network.
 func TCAPNext() *TCAPDigest {
 	tcapdigest := &TCAPDigest{}
 	d := C.tcap_next()
