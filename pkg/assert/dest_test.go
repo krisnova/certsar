@@ -19,32 +19,34 @@
 //  ╚██████╗███████╗██║  ██║   ██║   ███████║██║  ██║██║  ██║
 //   ╚═════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝
 
-package gotcap
+package assert
 
-// #cgo LDFLAGS: -ltcap -lpcap
-//
-// #include "tcap.h"
-// #include "pcap.h"
-import "C"
-import "net"
-
-const (
-	// TCAP_MAX_DIGEST_PACKET is taken from tcap.h
-	TCAP_MAX_DIGEST_PACKET int = 32
+import (
+	"net"
+	"testing"
 )
 
-// TCAPDigest corresponds to the digest offered in the tcap.h header file.
-// This represents a TLS digest being snigged off the network using tcpdump.
-type TCAPDigest struct {
-	Destination *net.Conn
-	Source      *net.Conn
-	Packets     [TCAP_MAX_DIGEST_PACKET]*C.uchar
+func TestDestinationIs(t *testing.T) {
+	conn, err := net.Dial("tcp", "localhost:")
+	if err != nil {
+		t.Errorf("unable to dial: %v", err)
+	}
+	DestinationIs(conn, conn)
+	if !DestinationIs(conn, conn) {
+		t.Errorf("Destination is failed")
+	}
 }
 
-// TCAPNext can be perpetually called to find the next TLS digest from the network.
-func TCAPNext() *TCAPDigest {
-	tcapdigest := &TCAPDigest{}
-	d := C.tcap_next()
-	tcapdigest.Packets = d.packets
-	return tcapdigest
+func TestDestinationIsNot(t *testing.T) {
+	conn1, err := net.Dial("tcp", "localhost:")
+	if err != nil {
+		t.Errorf("unable to dial: %v", err)
+	}
+	conn2, err := net.Dial("tcp", "localhost:")
+	if err != nil {
+		t.Errorf("unable to dial: %v", err)
+	}
+	if !DestinationIsNot(conn1, conn2) {
+		t.Errorf("Destination is not failed")
+	}
 }
