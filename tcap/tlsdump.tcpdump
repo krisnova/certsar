@@ -1,0 +1,41 @@
+#!/bin/bash
+# Copyright © 2022 The Certsar Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+#   ██████╗███████╗██████╗ ████████╗███████╗ █████╗ ██████╗
+#  ██╔════╝██╔════╝██╔══██╗╚══██╔══╝██╔════╝██╔══██╗██╔══██╗
+#  ██║     █████╗  ██████╔╝   ██║   ███████╗███████║██████╔╝
+#  ██║     ██╔══╝  ██╔══██╗   ██║   ╚════██║██╔══██║██╔══██╗
+#  ╚██████╗███████╗██║  ██║   ██║   ███████║██║  ██║██║  ██║
+#   ╚═════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝
+#
+# [USERSPACE PACKET CAPTURE]
+#
+#   This uses tcpdump which reads from userspace!
+#   In order to have a more reliable TCP dump capture we need to use eBPF
+#
+#   echo 1 > /sys/kernel/tracing/events/tcp/tcp_probe/enable
+#   cat /sys/kernel/tracing/trace_pipe
+#   echo 0 > /sys/kernel/tracing/events/tcp/tcp_probe/enable
+#
+#   Good blog on eBPF and HTTP: https://www.seekret.io/blog/a-practical-guide-to-capturing-production-traffic-with-ebpf/
+#
+# Original command from
+#   https://www.baeldung.com/linux/tcpdump-capture-ssl-handshake
+#
+# This command will capture the client hello packet of the SSL handshake.
+# 4.1.2.  Client Hello https://datatracker.ietf.org/doc/html/rfc8446#section-4.1.2
+#
+# - Listening all all interfaces, on all ports, for all TLS client hello messages.
+tcpdump "(tcp[((tcp[12] & 0xf0) >>2)] = 0x16) && (tcp[((tcp[12] & 0xf0) >>2)+5] = 0x01)"
