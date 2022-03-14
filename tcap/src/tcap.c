@@ -20,16 +20,19 @@
 //   ╚═════╝╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝
 
 #include "tcap.h"
+#include "headers.h"
 #include "version.h"
 #include <pcap.h>
 #include <stdio.h>
+#include <string.h>
+
+/* ethernet headers are always exactly 14 bytes */
+#define SIZE_ETHERNET 14
 
 void about(void) {
     printf("     > tcap version: %s \n", VERSION);
     printf("     > libtcap.so.%s \n", VERSION);
 }
-
-
 
 // tcap_next
 //
@@ -89,6 +92,32 @@ struct tcap_digest tcap_next(void) {
 	packet = pcap_next(handle, &header);
     pcap_close(handle);
     digest.packets[0] = packet;
+
+    // Data we can assume from the packet
+    const struct sniff_ethernet *ethernet; /* The ethernet header */
+    const struct sniff_ip *ip; /* The IP header */
+    const struct sniff_tcp *tcp; /* The TCP header */
+    const char *payload; /* Packet payload */
+
+    u_int size_ip;
+    u_int size_tcp;
+
+    ethernet = (struct sniff_ethernet*)(packet);
+    ip = (struct sniff_ip*)(packet + SIZE_ETHERNET);
+    size_ip = IP_HL(ip)*4;
+    if (size_ip < 20) {
+	    fprintf(stderr, "error invalid IP header length: %u bytes\n", size_ip);
+        return digest;
+    }
+    tcp = (struct sniff_tcp*)(packet + SIZE_ETHERNET + size_ip);
+    size_tcp = TH_OFF(tcp)*4;
+    if (size_tcp < 20) {
+	    fprintf(stderr, "error invalid TCP header length: %u bytes\n", size_tcp);
+        return digest;
+    }
+    payload = (u_char *)(packet + SIZE_ETHERNET + size_ip + size_tcp);
+
+    strcpy(digest.destination, ethernet->ether_dhost);
 
     return digest;
 }

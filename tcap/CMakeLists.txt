@@ -32,6 +32,8 @@ project(tcap VERSION ${TCAP_SO_VERSION} DESCRIPTION "TLS Capture Library")
 #
 add_library(tcap SHARED
         src/tcap.c
+        src/version.h
+        src/headers.h
         )
 
 find_package(OpenSSL REQUIRED)

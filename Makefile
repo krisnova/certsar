@@ -31,6 +31,16 @@ compile: ## Compile for the local architecture ⚙
 	@echo "Compiling..."
 	go build -ldflags "-X 'github.com/kris-nova/certsar.Version=$(version)'" -o certsar cmd/*.go
 
+.PHONY: tcap
+tcap: ## Compile tcap for the local architecture ⚙
+	@echo "Compiling tcap..."
+	cd tcap/build && cmake .. && make && make install
+
+.PHONY: install
+install:  ## Install certsar to /usr/local/bin
+		chmod +x certsar
+		cp certsar /usr/bin/certsar
+
 .PHONY: help
 help:  ## 🤔 Show help messages for make targets
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}'

@@ -30,7 +30,6 @@ import (
 func RunCommandLineAndExit() {
 	fmt.Printf("certsar v%s\n", Version)
 	for {
-		t := gotcap.TCAPNext()
-		fmt.Println(t)
+		gotcap.TCAPNext()
 	}
 }

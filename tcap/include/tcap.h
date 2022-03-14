@@ -27,7 +27,7 @@
 #define TCAP_MAX_DIGEST_PACKET 32
 
 typedef struct tcap_digest {
-    // TODO Src and Dst
+    const u_char *destination[6];
     const u_char *packets[TCAP_MAX_DIGEST_PACKET];
 } tcap_digest;
 

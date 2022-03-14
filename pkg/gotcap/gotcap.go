@@ -26,7 +26,10 @@ package gotcap
 // #include "tcap.h"
 // #include "pcap.h"
 import "C"
-import "net"
+import (
+	"fmt"
+	"net"
+)
 
 const (
 	// TCAP_MAX_DIGEST_PACKET is taken from tcap.h
@@ -37,7 +40,7 @@ const (
 // This represents a TLS digest being snigged off the network using tcpdump.
 type TCAPDigest struct {
 	Destination *net.Conn
-	Source      *net.Conn
+	Dest        [6]*C.uchar
 	Packets     [TCAP_MAX_DIGEST_PACKET]*C.uchar
 }
 
@@ -46,5 +49,21 @@ func TCAPNext() *TCAPDigest {
 	tcapdigest := &TCAPDigest{}
 	d := C.tcap_next()
 	tcapdigest.Packets = d.packets
+	tcapdigest.Dest = d.destination
+
+	// Find source and destination
+	px := tcapdigest.Packets[0]
+
+	fmt.Println(px)
+	fmt.Println(tcapdigest.Dest)
 	return tcapdigest
 }
+
+//func ucharToString(c *C.uchar) string {
+//	var buf []byte
+//	for *c != 0 {
+//		buf = append(buf, *c)
+//		c = (*C.uchar)(unsafe.Pointer(uintptr(unsafe.Pointer(c)) + 1))
+//	}
+//	return string(buf)
+//}
